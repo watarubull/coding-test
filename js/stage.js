@@ -1,199 +1,127 @@
-const testMode = true;
-
-const htmlArea = $("#htmlArea");
-const styleArea = $("#styleArea");
-const sampleArea = $(".viewInner");
-const subArea = $(".subArea");
-
 const stageArray = [
   {
     level: 1,
     stageName: "stage01",
-    stageTask: '<div class="task">テキストを中央寄せにしよう！</div>',
-    stageHtml: '<div class="box">テキストを中央に寄せてね。</div>',
-    sampleStyleCode: ".box{\n    text-align: center\n}",
+    stageTask: '<div class="task">文字色と背景色を変えよう！</div>',
+    stageHtml:
+      '<div class="wrap">\n    <span class="color">文字色（#f00）</span>\n    と背景色（#ccc）を変えてね。\n</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #ccc;\n}\n.color{\n    color: #f00;\n}",
+    defaultStyle: ".wrap{\n    \n}\n.color{\n    \n}",
+    comment: "文字色はcolor、背景はbackground-colorが正しいプロパティだ！",
   },
   {
     level: 1,
     stageName: "stage02",
-    stageTask: '<div class="task">要素を中央寄せにしよう！</div>',
+    stageTask: '<div class="task">余白を空けよう！①</div>',
     stageHtml:
-      '<div class="box">\n    <div class="item">要素を中央に寄せてね。（width 200px）</div>\n</div>',
-    sampleStyleCode: ".item{\n    width: 200px;\n    margin: 0 auto;\n}",
+      '<div class="wrapA">\n    この要素の下に30pxの余白を入れよう！\n</div>\n<div class="wrapB">\n    余白を入れるプロパティは２つあるけどどちらを使うかな？！\n</div>',
+    sampleStyleCode:
+      ".wrapA{\n    background-color: #efffff;\n    margin-bottom: 30px;\n}\n.wrapB{\n    background-color: #ffefff;\n    \n}",
+    defaultStyle:
+      ".wrapA{\n    background-color: #efffff;\n    \n}\n.wrapB{\n    background-color: #ffefff;\n    \n}",
+    comment: "要素と要素の間の余白はmarginを使おう！",
+  },
+  {
+    level: 1,
+    stageName: "stage03",
+    stageTask: '<div class="task">余白を空けよう！②</div>',
+    stageHtml:
+      '<div class="wrapA">\n    この要素の下に30pxの余白を入れよう！\n</div>\n<div class="wrapB">\n    余白を入れるプロパティは２つあるけどどちらを使うかな？！\n</div>',
+    sampleStyleCode:
+      ".wrapA{\n    background-color: #efffff;\n    padding-bottom: 30px;\n}\n.wrapB{\n    background-color: #ffefff;\n    \n}",
+    defaultStyle:
+      ".wrapA{\n    background-color: #efffff;\n    \n}\n.wrapB{\n    background-color: #ffefff;\n    \n}",
+    comment: "要素の内側の余白にはpaddingを使おう！",
+  },
+  {
+    level: 2,
+    stageName: "stage04",
+    stageTask: '<div class="task">テキストを中央寄せにしよう！</div>',
+    stageHtml: '<div class="wrap">テキストを中央に寄せてね。</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #efffff;\n    text-align: center\n}",
+    defaultStyle: ".wrap{\n    background-color: #efffff;\n    \n}",
+    comment:
+      "テキストの寄せを指定するtext-align。他にもいろんな指定があるぞ！調べてみよう！",
+  },
+  {
+    level: 2,
+    stageName: "stage05",
+    stageTask: '<div class="task">要素を中央寄せにしよう！①</div>',
+    stageHtml:
+      '<div class="wrap">\n    <div class="item">要素を中央に寄せてね。（width 200px）</div>\n</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #efffff;\n    \n}\n.item{\n    background-color: #ffefff\n    width: 200px;\n    margin: 0 auto;\n}",
+    defaultStyle:
+      ".wrap{\n    background-color: #efffff;\n    \n}\n.item{\n    background-color: #ffefff\n}",
+    comment:
+      "要素（ブロックレベル要素）を寄せたい時は、まず幅を決めてあげないとmarginが効かないぞ！",
+  },
+  {
+    level: 2,
+    stageName: "stage06",
+    stageTask: '<div class="task">要素を中央寄せにしよう！②</div>',
+    stageHtml:
+      '<div class="wrap">\n    <img src="./img/img01.jpg" alt="ミドリガメのわた子としずか" />\n</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #efffff;\n}\n.wrap img{\n    display: block;\n    margin: 0 auto;\n}\n",
+    defaultStyle:
+      ".wrap{\n    background-color: #efffff;\n    \n}\nwrap img{\n    \n}",
+    comment:
+      "画像（インライン要素、インラインブロック要素）を寄せたい時は、ただmargin: 0 auto;を指定しても効かないぞ！まずは要素をブロックレベル要素にしてから動かそう！<br />ちなみに、親要素の.wrapにtext-align:center;をかけてあげても中央寄せにできるぞ！",
+  },
+  {
+    level: 3,
+    stageName: "stage07",
+    stageTask: '<div class="task">flexを使って要素を横並びにしよう！①</div>',
+    stageHtml:
+      '<div class="wrap">\n    <div class="item">要素を横並びにしてね。（width 200px、要素の間は20pxの余白）</div>\n    <div class="item">要素を横並びにしてね。（width 200px）</div>\n</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #efffff;\n    display: flex;\n    justify-content: flex-start;\n    gap: 20px;\n}\n.item{\n    background-color: #ffefff;\n    width: 200px;\n}",
+    defaultStyle:
+      ".wrap{\n    background-color: #efffff;\n    \n}\n.item{\n    background-color: #ffefff\n}",
+    comment:
+      "flexの使い方はわかったかな？<br />親要素にdisplay: flex;をかけることで子要素を自在に動かせるようになるぞ！<br />横方向の並べ方を指定するのにはjustify-content、要素の間の余白を決めるのはgapと、flexに付随してさまざまなプロパティがあるので、どんなことができるか調べてみよう！",
+  },
+  {
+    level: 3,
+    stageName: "stage08",
+    stageTask:
+      '<div class="task">flexを使って要素を横並びにしよう！②<br />〜上下の位置を中央に揃える〜</div>',
+    stageHtml:
+      '<div class="wrap">\n    <div class="item">要素を横並びにしてね。（width 200px、要素の間は20pxの余白）</div>\n    <div class="item">要素を横並びにしてね。（width 200px）</div>\n    <div class="item">要素を横並びにしてね。（width 200px）</div>\n</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #efffff;\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n    gap: 20px;\n}\n.item{\n    background-color: #ffefff;\n    width: 200px;\n}",
+    defaultStyle:
+      ".wrap{\n    background-color: #efffff;\n    \n}\n.item{\n    background-color: #ffefff\n}",
+    comment:
+      "flexで上下の並び方を制御するにはalign-itemsを使うぞ！<br />上下を中央にするだけじゃなく、一番高さの高いものに合わせるstretch（デフォルトで指定されている）など、便利なプロパティがあるので調べてみよう！",
+  },
+  {
+    level: 3,
+    stageName: "stage09",
+    stageTask: '<div class="task">flexを使って中央寄せをしよう！</div>',
+    stageHtml:
+      '<div class="wrap">\n    <div class="item">要素を中央に寄せてね。（width 200px）</div>\n</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #efffff;\n    display: flex;\n    justify-content: center;\n}\n.item{\n    background-color: #ffefff;\n    width: 200px;\n}",
+    defaultStyle:
+      ".wrap{\n    background-color: #efffff;\n    \n}\n.item{\n    background-color: #ffefff\n}",
+    comment:
+      "flexというと「２つ以上の子要素を横並びにする」というイメージがあるかもしれないけど、実は子要素が一つでも使えるぞ！<br />キービジュアルの真ん中にキャッチコピーを持ってきたい時など、意外と使える場面が多いから覚えておこう！",
+  },
+  {
+    level: 3,
+    stageName: "stage10",
+    stageTask: '<div class="task">flexで自在にレイアウトしよう！</div>',
+    stageHtml:
+      '<div class="wrap">\n    <div class="item item01">この要素はwidth200px<br />要素と要素の間は20px;</div>\n    <div class="item item02">この要素は残りの幅全部</div>\n    <div class="item item03">この要素はwidth200px</div>\n</div>',
+    sampleStyleCode:
+      ".wrap{\n    background-color: #efffff;\n    display: flex;\n    justify-content: center;\n    gap: 20px;\n}\n.item{\n    background-color: #ffefff;\n    width: 200px;\n}\n.item02{\n    background-color: #ffffef;\n    flex-grow: 1;\n}",
+    defaultStyle:
+      ".wrap{\n    background-color: #efffff;\n    \n}\n.item{\n    background-color: #ffefff;\n    \n}\n.item02{\n    background-color: #ffffef;\n    \n}",
+    comment:
+      "flexで複数要素を並べる時、余った幅をどう割り振るか？ということを決めることができる！<br />それがflex:grow;！子要素それぞれに数字を割り振ると、その割合に応じて残った幅を割り当ててくれる！<br />今回は真ん中の要素にだけ1を指定することで、「残りは全部この要素に割り振る」という意味になった！<br />なかなか感覚が掴めないプロパティは値をいじって試してみよう！",
   },
 ];
-
-let stageSetItems = '<ul class="stageList font-en">';
-
-$.each(stageArray, function (index, item) {
-  stageSetItems += `<li data-role="nav" data-type="stage" data-name=${item.stageName} class="selectMenu">${item.stageName}</li>`;
-});
-
-stageSetItems += "</ul>";
-subArea.html(stageSetItems);
-
-//サブエリアクリック時の動き
-let currentStage = null;
-let currentBtn = true;
-$(document).on("click", ".selectMenu", function () {
-  if ($(this).data("role") === "nav") {
-    switch ($(this).data("type")) {
-      case "stage":
-        currentStage = $(this).data("name");
-        $.each(stageArray, function (index, item) {
-          if (item.stageName === currentStage) {
-            sampleArea.html(item.stageTask);
-          }
-        });
-        setNav($(this).data());
-        break;
-      case "test":
-        currentBtn = true;
-        const stageNm = $(this).parent().data("stage");
-        const itemVal = $(this).data("val");
-        setElem(stageNm, itemVal);
-        if (currentBtn) {
-          $(this).parent().find("li").removeClass("current");
-          $(this).addClass("current");
-        }
-        break;
-      default:
-        break;
-    }
-  }
-});
-
-function setNav(data) {
-  if (data.type === "stage") {
-    $.each(stageArray, function (index, item) {
-      if (item.stageName === data.name) {
-        let navElem = '<div class="stageMenu appendMenu">';
-        navElem += `<p class="pagenation font-en"><span class="back">＜back</span><span class="current">${item.stageName}</span></p>`;
-        navElem += `<ul class="stageList" data-stage=${item.stageName}>`;
-        navElem += `<li data-role="nav" data-type="test" data-val="task" class="selectMenu current">出題を見る</li>`;
-        navElem += `<li data-role="nav" data-type="test" data-val="sample" class="selectMenu">見本を見る</li>`;
-        navElem += `<li data-role="nav" data-type="test" data-val="coding" class="selectMenu">回答する</li>`;
-        navElem += `<li data-role="nav" data-type="test" data-val="answer" class="selectMenu">解答例を見る</li>`;
-        navElem += `</ul>`;
-        navElem += `</div>`;
-        subArea.append(navElem);
-      }
-    });
-  }
-}
-
-function setElem(stage, itemVal) {
-  $.each(stageArray, function (index, item) {
-    if (item.stageName === stage) {
-      switch (itemVal) {
-        case "task":
-          sampleArea.html(item.stageTask);
-          htmlArea.val("");
-          styleArea.val("");
-          break;
-        case "sample":
-          sampleArea.html(item.stageHtml);
-          htmlArea.val("");
-          styleArea.val("");
-          setStyles(item.sampleStyleCode, 1);
-          break;
-        case "coding":
-          sampleArea.html(item.stageHtml);
-          htmlArea.val(item.stageHtml);
-          if (localStorage.getItem(currentStage) != null) {
-            const styleElem = JSON.parse(localStorage.getItem(currentStage));
-            setStyles(styleElem, 1);
-            styleArea.val(styleElem);
-          } else {
-            styleArea.val("");
-          }
-          break;
-        case "answer":
-          if (!confirm("本当に解答を見ますか？")) {
-            currentBtn = false;
-            break;
-          } else {
-            sampleArea.html(item.stageHtml);
-            htmlArea.val(item.stageHtml);
-            styleArea.val(item.sampleStyleCode);
-            setStyles(item.sampleStyleCode, 1);
-            break;
-          }
-
-        default:
-          break;
-      }
-    }
-  });
-}
-
-$(document).on("click", ".back", function () {
-  sampleArea.html("");
-  htmlArea.val("");
-  styleArea.val("");
-  $(this).parent().parent().remove();
-});
-
-function setStyles(val, flag) {
-  let classItems = val.split(/}/);
-  let Items = classItems.map(function (item) {
-    let codeItem = item.split(/[{}\n]/);
-    codeItem = codeItem.filter(function (s) {
-      return s !== "";
-    });
-    let classObj = {};
-    let itemObj = {};
-    $.each(codeItem, function (index, item) {
-      item = item.trim();
-      if (index === 0) {
-        classObj = { classNm: item };
-      } else {
-        item = item.replace(/;/, "").split(/:/);
-        itemObj = { ...itemObj, [item[0]]: item[1] };
-      }
-    });
-    classObj = { ...classObj, itemObj };
-    return classObj;
-  });
-  Items.pop();
-
-  $.each(Items, function (index, item) {
-    $(item.classNm).removeAttr("style");
-    $(item.classNm).css(item.itemObj);
-  });
-  if (flag === 0) {
-    localStorage.setItem(currentStage, JSON.stringify(val));
-  }
-}
-
-function insertSpace(val) {
-  const curserPosition = styleArea.get(0).selectionStart;
-  let insertedVal =
-    val.substr(0, curserPosition) + "    " + val.substr(curserPosition);
-  styleArea.val(insertedVal);
-  styleArea.get(0).setSelectionRange(curserPosition + 4, curserPosition + 4);
-}
-
-styleArea.on("keyup", function (e) {
-  let code = styleArea.val();
-  setStyles(code, 0);
-  if (e.keyCode == 13) {
-    insertSpace(code);
-  }
-});
-
-let htmlVal = htmlArea.val();
-sampleArea.html(htmlVal);
-
-htmlArea.on("keyup", function () {
-  let htmlVal = htmlArea.val();
-  sampleArea.html(htmlVal);
-  let code = styleArea.val();
-  setStyles(code, 0);
-});
-
-if (!testMode) {
-  $(document).on("contextmenu", function (e) {
-    return false;
-  });
-}
